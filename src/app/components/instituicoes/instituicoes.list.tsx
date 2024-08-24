@@ -56,7 +56,7 @@ export default function InstituicoesList() {
     }
 
     const openEvento = (instituicaoId: string, evento?: string) => {
-        setEventoEdit({instituicaoId, evento});
+        setEventoEdit({ instituicaoId, evento });
         setOpenModalEvento(true);
     }
 
@@ -156,6 +156,12 @@ export default function InstituicoesList() {
         </div>
     }
 
+    const getIndicadorEventos = (eventos: any[]) => {
+        if (eventos && eventos.length > 1) {
+            return <span className="pl-2 text-sm text-slate-500 w-fit text-blue-600 underline">(+{eventos.length - 1})</span>
+        }
+    }
+
     return (
         <Card>
             <CardHeader title="Instituição" btnAction={() => open("")} />
@@ -188,20 +194,24 @@ export default function InstituicoesList() {
                     <tbody>
                         {data && data.content && data.content.map(instituicao =>
                             <tr className="hover:bg-slate-50 border-b border-slate-200" key={instituicao.id}>
-                                <td className="p-4 py-5">
+                                <td className="p-2">
                                     <p className="block font-semibold text-sm text-slate-800">{instituicao.nome}</p>
                                 </td>
-                                <td className="p-4 py-5">
+                                <td className="p-2">
                                     <p className="text-sm text-slate-500">{getTipoInstituicaoDescription(instituicao.tipo)}</p>
                                 </td>
-                                <td className="p-4 py-5">
+                                <td className="p-2">
                                     <Popover content={getPopover(instituicao)}>
-                                        <p className="text-sm text-slate-500 w-fit">{instituicao.eventos && instituicao.eventos.length > 0
-                                            ? instituicao.eventos[0].nome + (instituicao.eventos.length > 1 ? " (+" + (instituicao.eventos.length - 1) + ")" : "")
-                                            : "Nenhum evento cadastrado."}</p>
+                                        <div className="flex w-fit">
+                                            <p className="text-sm text-slate-500 w-fit">{instituicao.eventos && instituicao.eventos.length > 0
+                                                ? instituicao.eventos[0].nome
+                                                : "Nenhum evento cadastrado."}</p>
+
+                                            {getIndicadorEventos(instituicao.eventos)}
+                                        </div>
                                     </Popover>
                                 </td>
-                                <td className="p-4 py-5">
+                                <td className="p-2">
                                     <EditButton action={() => open(instituicao.id)} />
                                     <DeleteButton action={() => deleteInstituicao(instituicao.id)} />
                                 </td>
